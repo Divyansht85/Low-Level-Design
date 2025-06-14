@@ -1,8 +1,12 @@
-package LLD;
+package LLD.GumballMachine;
 
 import LLD.State.*;
 
-public class GumballMachine {
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class GumballMachine extends UnicastRemoteObject implements GumballMachineRemote {
+    private static final long serialVersionUID = 1L;
     State state;
     int count=0;
     State hasQuarterState;
@@ -10,7 +14,9 @@ public class GumballMachine {
     State noQuarterState;
     State soldState;
     State winnerState;
-    public GumballMachine(int count) {
+    String location;
+    public GumballMachine(String location,int count) throws RemoteException {
+        this.location = location;
         this.count = count;
         this.hasQuarterState = new HasQuarterState(this);
         this.noQuarterState = new NoQuarterState(this);
@@ -28,6 +34,12 @@ public class GumballMachine {
     }
     public void setState(State state) {
         this.state = state;
+    }
+    public String getLocation() {
+        return location;
+    }
+    public void setLocation(String location) {
+        this.location = location;
     }
     public void insertQuarter() {
         state.insertQuarter();
@@ -67,3 +79,4 @@ public class GumballMachine {
         return "GumballMachine{" + "state=" + state.getClass().getSimpleName() + ", count=" + count + '}';
     }
 }
+
